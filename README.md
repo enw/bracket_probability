@@ -7,7 +7,7 @@ I was recently thinking about [brackets](https://en.wikipedia.org/wiki/Bracket_(
 ### API
 
 ```coffeescript
-A = require 'bracket_probability'
+A = require 'bracket-probability'
 dist = { a: { b: .9 }, b: { a: .1 }}
 A.get_probability_dist "ab", dist
 ```
