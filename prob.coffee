@@ -1,4 +1,6 @@
+console.log ''
 console.log 'prob.js v0.0.1'
+_ = require ('underscore')
 
 ###
 what's the probability that input team will win championship given bracket and
@@ -23,30 +25,30 @@ fxn takes
 returns probably distribution for the championship
 
 ###
-champtionship_prob = (lineup, prob_matrix) ->
-  # get probability A will beat B given probability_matrix                   
-  prob = (A,B) -> return prob_matrix[A][B]
-
-  # get probability distribution for a subsection of the lineup
-  prob_dist = (left, right) -> {
-    
-  }
-  
-
+lineup_prob = (lineup, prob_matrix) ->
+  console.log "lineup_prob #{lineup}"
   # get opponent
   opponent = () -> if (lineup[0] == team_name) then lineup[1] else lineup[0]
 
   # probability is easy if we've only got one game
+  # actually... bottom out at 1?
   if lineup.length == 2
     teamA = lineup[0]
     teamB = lineup[1]
     retval = {}
-    retval[teamA] = prob(teamA, teamB)
-    retval[teamB] = prob(teamB, teamA)
+    retval[teamA] = pfunc(teamA, teamB)
+    retval[teamB] = pfunc(teamB, teamA)
     return retval
   else
-    console.log exports
-    'TODO: sum of probabilities'
+    left = lineup[0...lineup.length/2]
+    right = lineup[lineup.length/2..lineup.length]
+    lprob = lineup_prob left, prob_matrix
+    rprob = lineup_prob right, prob_matrix
+
+    # merge probability distributions into lprob
+    for key, value of rprob
+      lprob[key] = value
+    lprob
 
 prob_matrix =
   a:
@@ -65,7 +67,59 @@ prob_matrix =
     a: .7
     b: .3
     c: .9
-    
-console.log champtionship_prob 'ab', prob_matrix
-console.log champtionship_prob 'abcd', prob_matrix
 
+# A - probability dist of teamname:probability
+# B - probability dist of teamname:probability, distinct entries from A
+# pfunc - function(A,B) that returns probability that A will win against B
+prob = (A, B, pfunc) ->
+  newprob = {}
+  
+  for teamname, specific_prob of A
+#    console.log 'l', teamname, specific_prob
+    accum = 0
+    for opponent, opponent_prob of B
+#      console.log 'r', opponent, opponent_prob, accum
+      accum += opponent_prob * pfunc(teamname, opponent)
+    newprob[teamname] = specific_prob * accum
+
+  for teamname, specific_prob of B
+#    console.log 'l', teamname, specific_prob
+    accum = 0
+    for opponent, opponent_prob of A
+#      console.log 'r', opponent, opponent_prob, accum
+      accum += opponent_prob * pfunc(teamname, opponent)
+    newprob[teamname] = specific_prob * accum
+    
+  return newprob
+
+pm = {
+   a:{b:.1, c:1, d:.9}
+   b:{a:.9, c:0, d:1}, 
+   c:{a:1, b:1, d:.1},
+   d:{a:.1, b:0, c:.9} 
+}
+pfunc = (a,b) -> return pm[a][b];
+
+lprob = { a:.1, b:.9 }
+rprob = { c:.2, d:.8 }
+
+#console.log 'PROB', prob lprob, rprob, pfunc
+
+lprob = { a:1 }
+rprob = { b:1 }
+console.log 'PROB', prob lprob, rprob, pfunc
+
+foo = { foo: 3 }
+bar = { bar: 3 }
+#console.log foo, bar, foo + bar
+
+#console.log 'p', pfunc 'b', 'a'
+
+# iterate through entries in a dictionary
+#console.log key, value for key, value of { a:.1, b:.9 }
+
+# iterate through items in a list
+#console.log key, value for key, value in [ 1, 2, 3 ]
+
+console.log 'RESULTS', 'ab', lineup_prob 'ab', prob_matrix
+console.log 'RESULTS', 'abcd', lineup_prob 'abcd', prob_matrix

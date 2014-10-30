@@ -4,13 +4,14 @@
   "description": "",
   "main": "go.js",
   "dependencies": {
-    "coffee-script": "^1.8.0"
+    "coffee-script": "^1.8.0",
+    "underscore": "^1.7.0"
   },
   "devDependencies": {
     "coffee-script": "^1.8.0"
   },
   "scripts": {
-      "test": "node go.js"
+    "test": "node go.js"
   },
   "author": "",
   "license": "ISC"
