@@ -26,29 +26,27 @@ returns probably distribution for the championship
 
 ###
 lineup_prob = (lineup, prob_matrix) ->
-  console.log "lineup_prob #{lineup}"
+  #console.log "lineup_prob #{lineup}"
   # get opponent
   opponent = () -> if (lineup[0] == team_name) then lineup[1] else lineup[0]
 
+  # function returns probability
+  pfunc = (a,b) -> return prob_matrix[a][b];
+
   # probability is easy if we've only got one game
   # actually... bottom out at 1?
-  if lineup.length == 2
-    teamA = lineup[0]
-    teamB = lineup[1]
-    retval = {}
-    retval[teamA] = pfunc(teamA, teamB)
-    retval[teamB] = pfunc(teamB, teamA)
-    return retval
+  if lineup.length == 1
+    p={}
+    p[lineup[0]]=1;
+    return p
   else
     left = lineup[0...lineup.length/2]
     right = lineup[lineup.length/2..lineup.length]
     lprob = lineup_prob left, prob_matrix
     rprob = lineup_prob right, prob_matrix
+    #console.log "inside lineup_prob #{left} #{right}", lprob, rprob
 
-    # merge probability distributions into lprob
-    for key, value of rprob
-      lprob[key] = value
-    lprob
+    return p = prob lprob, rprob, pfunc
 
 prob_matrix =
   a:
@@ -107,7 +105,7 @@ rprob = { c:.2, d:.8 }
 
 lprob = { a:1 }
 rprob = { b:1 }
-console.log 'PROB', prob lprob, rprob, pfunc
+#console.log 'PROB', prob lprob, rprob, pfunc
 
 foo = { foo: 3 }
 bar = { bar: 3 }
@@ -121,5 +119,9 @@ bar = { bar: 3 }
 # iterate through items in a list
 #console.log key, value for key, value in [ 1, 2, 3 ]
 
-console.log 'RESULTS', 'ab', lineup_prob 'ab', prob_matrix
+#console.log 'RESULTS', 'a', lineup_prob 'a', prob_matrix
+#console.log 'RESULTS', 'b', lineup_prob 'b', prob_matrix
+#console.log 'RESULTS', 'ab', lineup_prob 'ab', prob_matrix
+#console.log 'RESULTS', 'ba', lineup_prob 'ba', prob_matrix
 console.log 'RESULTS', 'abcd', lineup_prob 'abcd', prob_matrix
+console.log 'RESULTS', 'cdab', lineup_prob 'cdab', prob_matrix
