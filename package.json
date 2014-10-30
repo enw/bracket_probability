@@ -1,5 +1,5 @@
 {
-  "name": "prob",
+  "name": "get-probability-dist",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -13,6 +13,6 @@
   "scripts": {
     "test": "mocha"
   },
-  "author": "",
+  "author": "Elliot Winard <hello@elliotwinard.com>",
   "license": "ISC"
 }
