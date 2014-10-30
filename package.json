@@ -2,15 +2,16 @@
   "name": "prob",
   "version": "1.0.0",
   "description": "",
-  "main": "go.js",
+  "main": "index.js",
   "dependencies": {
     "coffee-script": "^1.8.0"
   },
   "devDependencies": {
-    "coffee-script": "^1.8.0"
+    "coffee-script": "^1.8.0",
+    "should": "^4.1.0"
   },
   "scripts": {
-    "test": "node go.js"
+    "test": "mocha"
   },
   "author": "",
   "license": "ISC"
