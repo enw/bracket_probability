@@ -1,6 +1,5 @@
 console.log ''
 console.log 'prob.js v0.0.1'
-_ = require ('underscore')
 
 ###
 what's the probability that input team will win championship given bracket and
